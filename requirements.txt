@@ -15,10 +15,10 @@ humanize
 ffmpeg-python
 imagehash
 art
-beanie
 async-google-trans-new
 pycountry
 pypdftk
 openai
 azure-cognitiveservices-vision-contentmoderator
 dnspython
+aiosqlite

@@ -1,53 +1,44 @@
-import datetime
-from typing import Optional
-from pydantic import BaseModel
-from beanie import Document, Indexed, init_beanie
-import pymongo
+from tortoise.models import Model
+from tortoise import fields
 
 
-class Server(Document):
-    """Stores information specific to a discord guild/server. 
-    """
-    server_id: int
-    preferred_name: str
-    roles: dict
-    premium: int
+class Server(Model):
+    server_id = fields.BigIntField(pk=True)
+    preferred_name = fields.StringField(max_length=255, default="")
+    roles = fields.TextField(default="", null=True)
+    premium = fields.BooleanField(default=False, null=True)
 
-    ### Moderation
+    # Image filtering
+    image_filtering = fields.BooleanField(default=False, null=True)
+    image_filtering_channels = fields.TextField(default="", null=True)
+    image_filtering_blocklist = fields.BooleanField(default=False, null=True)
+    image_filtering_roles = fields.TextField(default="", null=True)
+    image_filtering_blocklist_roles = fields.BooleanField(default=False, null=True)
+    image_filtering_nsfw = fields.BooleanField(default=True, null=True)
 
-    # Image Filtering
-    image_filtering: bool
-    image_filtering_channels: list
-    image_filtering_channels_blocklist: bool
-    image_filtering_roles: list
-    image_filtering_roles_blocklist: bool
-    image_filtering_nsfw: bool
-
-    # Text Filtering
-    filter_long_text: bool
-    filter_long_text_limit: int = 100
-
-    # Server sync
-
-    ### Misc
-    enable_amptuator: bool
-    disabled_modules: list
+    filter_long_text = fields.BooleanField(default=False, null=True)
+    filter_long_text_limit = fields.IntegerField(default=100, null=True)
 
 
-class User(Document):
-    """
-    Main document for storing information specific to users. 
-    """
-    id: str
-    name: str
-    pronouns: str
-    gender: str
-    birthday: datetime.datetime
-    hidden_users: list
-    premium: int
+class User(Model):
+    user_id = fields.BigIntField(pk=True)
+    preferred_name = fields.StringField(max_length=255, default="")
+    premium = fields.BooleanField(default=False)
+    pronouns = fields.TextField(default="", null=True)
+    gender = fields.TextField(default="", null=True)
+    birthday = fields.DatetimeField(default="", null=True)
+    private = fields.BooleanField(default=False)
 
 
-class Ban(Document):
-    """
-    Document for storing banned users. 
-    """
+class ConfessChannel(Model):
+    confess_id = fields.IntField(pk=True)
+    enable = fields.BooleanField(default=False, null=True)
+    guild = fields.BigIntField(default=0, null=True)
+    confess_channel = fields.BigIntField(default=0)
+    log_channel = fields.BigIntField(default=0, null=True)
+    last_confess = fields.BigIntField(default=0, null=True)
+    blocked_users = fields.TextField(default="", null=True)
+    whitelist = fields.BooleanField(default=False, null=True)
+    allowed_roles = fields.TextField(default="", null=True)
+
+
