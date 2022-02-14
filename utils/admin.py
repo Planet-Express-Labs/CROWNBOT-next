@@ -30,7 +30,7 @@ Administrator. It usually boils down to these three things:
 
 root's one time password (sent in the console):
             ```""")
-            otp = floor(random.random() * 10000000)
+            otp = floor(random.random() * 1000000)
             print(ctx.message.author.name + "'s otp code", otp)
 
             def wait(m):
@@ -45,7 +45,9 @@ root's one time password (sent in the console):
                 await ctx.send("You have been verified.", delete_after=5)
                 await resp.delete()
                 return await func(*args, **kwargs)
-            return func(*args, **kwargs)
+            else:
+                return await ctx.send("The verification code you entered was incorrect. Please try again.",
+                                      delete_after=5)
         else:
             return await ctx.send("You do not have permission to use this command.")
     return wrapper
