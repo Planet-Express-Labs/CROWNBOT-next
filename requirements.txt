@@ -1,6 +1,13 @@
-disnake~=2.3.2
 requests~=2.27.1
 openai~=0.14.0
 pypdftk~=0.5
 ffmpeg~=1.4
-tortoise-orm~=0.17.3
+git+https://github.com/DisnakeDev/disnake@master ~=2.4.0
+art~=5.4
+Pillow~=9.0.1
+ImageHash~=4.2.1
+numpy~=1.22.2
+tortoise~=0.1.1
+async_google_trans_new
+pycountry
+pillow
