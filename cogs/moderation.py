@@ -12,7 +12,7 @@ class Moderation(commands.Cog):
         self.bot = bot
 
     @commands.slash_command(
-        description="Gets user info",
+        brief="Gets user info",
         options=[
             Option("user", "User to get info for.", OptionType.user, required=True)
         ],
@@ -132,7 +132,6 @@ class Moderation(commands.Cog):
             await channel.delete_messages(messages)
         await ctx.response.send_message(f"Deleted {limit} messages from {channel.mention}.", ephemeral=True)
 
-
     @commands.has_permissions(kick_members=True)
     @commands.slash_command(
         name="kick",
@@ -145,6 +144,7 @@ class Moderation(commands.Cog):
             await ctx.response.send_message(f"{user.mention} has been kicked successfully.")
         except disnake.errors.Forbidden:
             await ctx.response.send_message(f"I do not have permission to execute this command!")
+
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
