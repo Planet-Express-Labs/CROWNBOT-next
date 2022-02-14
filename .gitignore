@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 # Config stuff
-config/config.ini
+data/config.ini
 
 # IDEA
 .idea/
