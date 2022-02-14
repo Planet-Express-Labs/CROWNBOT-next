@@ -8,14 +8,10 @@
 # The only reason for taking full copyright is because of a few bad actors.
 # As long as you are using my code in good faith, we will probably not have an issue with it.
 from typing import Text
-from typing_extensions import Required
-from disnake.ext import commands
-import disnake
 
-from database.databases import *
-from utils.integrations import *
-from utils.integrations.azure_cm import image_moderation
 import openai
+from disnake.ext import commands
+
 
 async def gpt_3_correct(ctx, text: Text):
     """

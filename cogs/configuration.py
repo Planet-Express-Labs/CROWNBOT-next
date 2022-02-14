@@ -2,17 +2,11 @@
 # All rights reserved.
 # The only reason for taking full copyright is because of a few bad actors.
 # As long as you are using my code in good faith, we will probably not have an issue with it.
-import asyncio
-from time import sleep
+
+from typing import List
 
 import disnake
-from disnake import ApplicationCommandInteraction
-from disnake.enums import *
 from disnake.ext import commands
-from database import databases
-from main import __version__
-from main import bot
-from typing import List
 
 
 class Menu(disnake.ui.View):
