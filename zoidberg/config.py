@@ -12,10 +12,10 @@ from pathlib import Path
 import openai
 
 log = logging.getLogger(__name__)
-config_path = p = Path('config/config.ini')
+config_path = p = Path('data/config.ini')
 
 if not os.path.exists(config_path):
-    print("Cannot find config file in /config/config.ini! Trying to load from environment variables... ")
+    print("Cannot find data file in /data/data.ini! Trying to load from environment variables... ")
     BOT_TOKEN = os.getenv("PEXL_TOKEN")
     TEST_GUILDS = os.getenv("PEXL_TEST_GUILDS")
     SUBSCRIPTION_KEY = os.getenv("PEXL_SUBSCRIPTION_KEY")
