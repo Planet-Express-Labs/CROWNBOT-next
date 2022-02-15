@@ -4,26 +4,46 @@
 # As long as you are using my code in good faith, we will probably not have an issue with it.
 
 from typing import List
-
+from tortoise import Tortoise
 import disnake
 from disnake.ext import commands
+import re
 
 
 class Menu(disnake.ui.View):
     def __init__(self, embeds: List[disnake.Embed]):
         super().__init__(timeout=None)
-        self.embeds = embeds[0]
+        self.embeds = embeds
         self.embed_count = 0
 
         self.first_page.disabled = True
         self.prev_page.disabled = True
+        self.additional_components = []
 
         # Sets the footer of the embeds with their respective page numbers.
         for i, embed in enumerate(self.embeds):
             embed.set_footer(text=f"Page {i + 1} of {len(self.embeds)}")
+            terms = re.findall(r"%([^;]*)", embed.description)
+            if any(terms):
+                embed.description = embed.description.replace(f"%{terms[0]}", "")
+                for each in terms:
+                    if each[0:7] == "%TOGGLE":
+                        params = each.replace('(', '').replace(')', '').split(', ')
+                        models = Tortoise.describe_models()
+                        for model in models:
+                            name = model.__name__
+                            if name.lower == params[0]:
+                                break
+
+                        self.additional_components.append(
+                            disnake.ui.Button(
+                                label=params[2],
+                                custom_id=params[3]
+                            )
+                        )
 
     @disnake.ui.button(emoji="⏪", style=disnake.ButtonStyle.blurple)
-    async def first_page(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+    async def first_page(self, interaction: disnake.MessageInteraction):
         self.embed_count = 0
         embed = self.embeds[self.embed_count]
         embed.set_footer(text=f"Page 1 of {len(self.embeds)}")
@@ -34,8 +54,8 @@ class Menu(disnake.ui.View):
         self.last_page.disabled = False
         await interaction.response.edit_message(embed=embed, view=self)
 
-    @disnake.ui.button(emoji="◀", style=disnake.ButtonStyle.secondary)
-    async def prev_page(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+    @disnake.ui.button(emoji="◀")
+    async def prev_page(self, interaction: disnake.MessageInteraction):
         self.embed_count -= 1
         embed = self.embeds[self.embed_count]
 
@@ -47,11 +67,11 @@ class Menu(disnake.ui.View):
         await interaction.response.edit_message(embed=embed, view=self)
 
     @disnake.ui.button(emoji="❌", style=disnake.ButtonStyle.red)
-    async def remove(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+    async def remove(self, interaction: disnake.MessageInteraction):
         await interaction.response.edit_message(view=None)
 
-    @disnake.ui.button(emoji="▶", style=disnake.ButtonStyle.secondary)
-    async def next_page(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+    @disnake.ui.button(emoji="▶")
+    async def next_page(self, interaction: disnake.MessageInteraction):
         self.embed_count += 1
         embed = self.embeds[self.embed_count]
 
@@ -63,7 +83,7 @@ class Menu(disnake.ui.View):
         await interaction.response.edit_message(embed=embed, view=self)
 
     @disnake.ui.button(emoji="⏩", style=disnake.ButtonStyle.blurple)
-    async def last_page(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
+    async def last_page(self, interaction: disnake.MessageInteraction):
         self.embed_count = len(self.embeds) - 1
         embed = self.embeds[self.embed_count]
 
@@ -72,44 +92,6 @@ class Menu(disnake.ui.View):
         self.next_page.disabled = True
         self.last_page.disabled = True
         await interaction.response.edit_message(embed=embed, view=self)
-
-class ConfigModal(disnake.ui.Modal):
-    def __init__(self) -> None:
-        components = [
-            disnake.ui.TextInput(
-                label="Name",
-                placeholder="The name of the tag",
-                custom_id="name",
-                style=disnake.TextInputStyle.short,
-                max_length=50,
-            ),
-            disnake.ui.TextInput(
-                label="Description",
-                placeholder="The description of the tag",
-                custom_id="description",
-                style=disnake.TextInputStyle.short,
-                min_length=5,
-                max_length=50,
-            ),
-            disnake.ui.TextInput(
-                label="Content",
-                placeholder="The content of the tag",
-                custom_id="content",
-                style=disnake.TextInputStyle.paragraph,
-                min_length=5,
-                max_length=1024,
-            ),
-        ]
-        super().__init__(title="Create Tag", custom_id="create_tag", components=components)
-
-    async def callback(self, inter: disnake.ModalInteraction) -> None:
-        embed = disnake.Embed(title="Tag Creation")
-        for key, value in inter.text_values.items():
-            embed.add_field(name=key.capitalize(), value=value, inline=False)
-        await inter.response.send_message(embed=embed)
-
-    async def on_error(self, error: Exception, inter: disnake.ModalInteraction) -> None:
-        await inter.response.send_message("Oops, something went wrong.", ephemeral=True)
 
 
 class Configuration(commands.Cog):
@@ -120,7 +102,7 @@ class Configuration(commands.Cog):
     async def paginator(self, inter):
         # Creates the embeds as a list.
         embeds = [
-            (disnake.Embed(
+            disnake.Embed(
                 title="Welcome to Zoidberg. ",
                 description="""
 Welcome to Zoidberg! I am your new moderation assistant.
@@ -134,9 +116,7 @@ If it does not appear, you must update the version of your Discord client.
 Press the next button to continue.
             """
             ),
-                None
-            ),
-            (disnake.Embed(
+            disnake.Embed(
                 title="Image filtering setup step 1",
                 description="""
 Would you like to enable image filtering? We use state of the art AI models to detect NSFW images.
@@ -152,23 +132,24 @@ Hash filtering uses our database to detect common images that may not be detecte
 These images usually don't contain nudity, but are still extremely suggestive
 
 You can configure which channels will use this filter on the next page.
+%TOGGLE(Server, image_filtering, enable_image_filtering)
+%TOGGLE(Server, hash_filtering, enable_image_filtering)
         """,
                 colour=disnake.Color.random(),
-            ),
-                ConfigModal()
             ),
             disnake.Embed(
                 title="Paginator example",
                 description="""
 I can look for NSFW images in certain channels. By default, I don't scan NSFW channels.
 I also can ignore certain roles.
+%MODAL(ConfigRoleModal)
                 """,
                 colour=disnake.Color.random(),
-            ),
+            )
         ]
 
         # Sends first embed with the buttons, it also passes the embeds list into the View class.
-        await inter.send(embed=embeds[0], view=Menu(embeds))
+        await inter.send(embed=embeds, view=Menu(embeds))
 
 
 def setup(bot):

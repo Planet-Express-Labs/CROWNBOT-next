@@ -2,21 +2,19 @@ from disnake.ext import commands
 import disnake
 
 
-class ConfigModal(disnake.ui.Modal):
+class ImageFilteringModal(disnake.ui.Modal):
     def __init__(self) -> None:
         components = [
             disnake.ui.TextInput(
-                label="Name",
-                placeholder="The name of the tag",
-                custom_id="name",
-                style=disnake.TextInputStyle.short,
-                max_length=50,
+                label="Enable ai image filtering",
+                placeholder="yes/no",
+                custom_id="filtering",
+                max_length=3,
             ),
             disnake.ui.TextInput(
                 label="Description",
                 placeholder="The description of the tag",
                 custom_id="description",
-                style=disnake.TextInputStyle.short,
                 min_length=5,
                 max_length=50,
             ),
