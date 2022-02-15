@@ -2,7 +2,7 @@ requests~=2.27.1
 openai~=0.14.0
 pypdftk~=0.5
 ffmpeg~=1.4
-git+https://github.com/DisnakeDev/disnake@master
+disnake~=2.4.0
 art~=5.4
 Pillow~=9.0.1
 ImageHash~=4.2.1
