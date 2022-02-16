@@ -1,7 +1,8 @@
 # Copyright 2021 Planet Express Labs
 # All rights reserved.
 # The only reason for taking full copyright is because of a few bad actors.
-# As long as you are using my code in good faith, we will probably not have an issue with it.
+# As long as you are using my code in good faith, we will probably not
+# have an issue with it.
 import disnake
 from disnake.ext import commands
 from disnake import Option, OptionType
@@ -13,17 +14,18 @@ import requests
 class Stonks(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.crypto_list = requests.get("https://api.coingecko.com/api/v3/coins/list").json()
+        self.crypto_list = requests.get(
+            "https://api.coingecko.com/api/v3/coins/list").json()
 
-    @commands.slash_command(
-        name="stocks",
-        description="Gets the value of a stock.",
-        options=[
-            Option("stonk", "Which stock to look up.", OptionType.string, required=True)
-        ]
-    )
+    @commands.slash_command(name="stocks",
+                            description="Gets the value of a stock.",
+                            options=[Option("stonk",
+                                            "Which stock to look up.",
+                                            OptionType.string,
+                                            required=True)])
     async def stonk(self, ctx, stonk):
-        stonk = "".join([letter for letter in stonk.upper() if letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'])
+        stonk = "".join([letter for letter in stonk.upper()
+                         if letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'])
         if not len(stonk) in [2, 3, 4]:
             await ctx.response.send_message("Uh oh... I don't think that's a stonk!")
             return
@@ -52,13 +54,12 @@ class Stonks(commands.Cog):
         except Exception as e:
             await ctx.response.send_message("Oh no! Maybe that isn't a stonk?")
 
-    @commands.slash_command(
-        name="crypto",
-        description="Get the value of a cryptocurrency!",
-        options=[
-            Option("crypto", "Which currency to look up. ", OptionType.string, required=True)
-        ]
-    )
+    @commands.slash_command(name="crypto",
+                            description="Get the value of a cryptocurrency!",
+                            options=[Option("crypto",
+                                            "Which currency to look up. ",
+                                            OptionType.string,
+                                            required=True)])
     async def crypto(self, ctx, crypto):
         replied = False
         for coin in self.crypto_list:
@@ -74,7 +75,7 @@ class Stonks(commands.Cog):
                     else:
                         await ctx.channel.send(f"{ticker} ({name}) is currently ${price}!")
                 # Broad af clause
-                except:
+                except BaseException:
                     await ctx.response.send_message("An error has occurred while processing this command. ")
                     replied = True
         if not replied:

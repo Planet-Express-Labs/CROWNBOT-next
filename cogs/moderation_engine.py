@@ -1,7 +1,8 @@
 # Copyright 2021 Planet Express Labs
 # All rights reserved.
 # The only reason for taking full copyright is because of a few bad actors.
-# As long as you are using my code in good faith, we will probably not have an issue with it.
+# As long as you are using my code in good faith, we will probably not
+# have an issue with it.
 from disnake.ext import commands
 import disnake
 
@@ -37,7 +38,7 @@ class ImageFiltering(commands.Cog):
         server = await Server.find_all(Server.server_id == message.guild.id)
         if not server.filter_images or not message.attachments:
             return
-        
+
         permissions = server.image_filtering_roles
         if permissions is not None:
             for each in message.author.permissions_in(message.channel):
