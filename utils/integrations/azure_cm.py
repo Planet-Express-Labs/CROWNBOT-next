@@ -17,10 +17,10 @@ TEXT_FOLDER = os.path.join(os.path.dirname(
 # performing image match operations against the list.
 LATENCY_DELAY = 0.5
 client = ContentModeratorClient(
-        endpoint=CONTENT_MODERATOR_ENDPOINT,
-        # Add your Content Moderator endpoint to your environment variables.
-        credentials=CognitiveServicesCredentials(SUBSCRIPTION_KEY)
-    )
+    endpoint=CONTENT_MODERATOR_ENDPOINT,
+    # Add your Content Moderator endpoint to your environment variables.
+    credentials=CognitiveServicesCredentials(SUBSCRIPTION_KEY)
+)
 
 
 def text_moderation(text):
@@ -45,7 +45,7 @@ def text_moderation(text):
 
 def image_moderation(image_url):
     """
-    Takes an image url and returns a dictionary of potential objectionable content. 
+    Takes an image url and returns a dictionary of potential objectionable content.
 
     Args:
         image_url ([string]): [URL of the image to be evaluated]
@@ -64,4 +64,10 @@ def image_moderation(image_url):
 
 
 if __name__ == "__main__":
-    sys.path.append(os.path.abspath(os.path.join(__file__, "../..", "..", "..")))
+    sys.path.append(
+        os.path.abspath(
+            os.path.join(
+                __file__,
+                "../..",
+                "..",
+                "..")))

@@ -18,7 +18,10 @@ def admin_command(func):
         else:
             ctx = args[0]
         bot = ctx.bot
-        print(ctx.message.author.name, "is trying to use an admin command. ", func.__name__)
+        print(
+            ctx.message.author.name,
+            "is trying to use an admin command. ",
+            func.__name__)
         if verify_user(ctx):
             message = await ctx.send("""```
 We trust you have received the usual lecture from the local System

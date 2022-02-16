@@ -1,7 +1,8 @@
 # Copyright 2021 Planet Express Labs
 # # All rights reserved.
 # The only reason for taking full copyright is because of a few bad actors.
-# As long as you are using my code in good faith, we will probably not have an issue with it.
+# As long as you are using my code in good faith, we will probably not
+# have an issue with it.
 import os
 
 import disnake
@@ -14,7 +15,9 @@ import sys
 
 __version__ = "3.0 PRE"
 
-activity = disnake.Activity(name='> planetexpresslabs.io', type=disnake.ActivityType.playing)
+activity = disnake.Activity(
+    name='> planetexpresslabs.io',
+    type=disnake.ActivityType.playing)
 
 # define activity, playing status
 # define gateway intents
@@ -65,9 +68,9 @@ async def init():
         return
 
     await Tortoise.init(
-            db_url=CONNURL,
-            modules={'models': ['database.databases']}
-        )
+        db_url=CONNURL,
+        modules={'models': ['database.databases']}
+    )
 
 
 async def handler() -> None:
