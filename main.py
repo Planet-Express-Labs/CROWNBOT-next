@@ -10,6 +10,7 @@ from tortoise import Tortoise
 from utils.admin import admin_command
 from zoidberg.config import *
 import signal
+import logging
 import sys
 
 __version__ = "3.0 PRE"
@@ -93,6 +94,9 @@ async def on_ready():
 
 @bot.slash_command(name='foo', description='Tests if the bot is dead or not')
 async def cmd_foo(ctx):
+    """
+    Simple test command
+    """
     await ctx.response.send_message(f"Bar!\nLatency: {bot.latency} ms")
 
 
