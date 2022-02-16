@@ -14,7 +14,8 @@ class Server(Model):
     image_filtering_channels = fields.TextField(default="", null=True)
     image_filtering_blocklist = fields.BooleanField(default=False, null=True)
     image_filtering_roles = fields.TextField(default="", null=True)
-    image_filtering_blocklist_roles = fields.BooleanField(default=False, null=True)
+    image_filtering_blocklist_roles = fields.BooleanField(
+        default=False, null=True)
     image_filtering_nsfw = fields.BooleanField(default=True, null=True)
 
     filter_long_text = fields.BooleanField(default=False, null=True)
@@ -83,7 +84,8 @@ class Reminder(Model):
 
 class User(Model):
     # Stores information that is used to personalize settings on a specific user
-    # Also provides a way for the bot to generate a profile for a user with features that discord doesn't provide
+    # Also provides a way for the bot to generate a profile for a user with
+    # features that discord doesn't provide
     user_internal_id = fields.IntField(pk=True)
     user_id = fields.BigIntField()
     preferred_name = fields.TextField(max_length=255, null=True)

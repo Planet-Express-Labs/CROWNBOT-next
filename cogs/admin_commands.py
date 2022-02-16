@@ -1,7 +1,8 @@
 # Copyright 2021 Planet Express Labs
 # All rights reserved.
 # The only reason for taking full copyright is because of a few bad actors.
-# As long as you are using my code in good faith, we will probably not have an issue with it.
+# As long as you are using my code in good faith, we will probably not
+# have an issue with it.
 from disnake.ext import commands
 
 from utils.admin import admin_command

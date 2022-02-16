@@ -1,4 +1,6 @@
-import sys, random, argparse
+import sys
+import random
+import argparse
 import imagehash
 import numpy as np
 import math

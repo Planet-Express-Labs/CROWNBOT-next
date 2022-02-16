@@ -1,7 +1,8 @@
 # Copyright 2021 Planet Express Labs
 # All rights reserved.
 # The only reason for taking full copyright is because of a few bad actors.
-# As long as you are using my code in good faith, we will probably not have an issue with it.
+# As long as you are using my code in good faith, we will probably not
+# have an issue with it.
 
 from typing import List
 from tortoise import Tortoise
@@ -25,10 +26,12 @@ class Menu(disnake.ui.View):
             embed.set_footer(text=f"Page {i + 1} of {len(self.embeds)}")
             terms = re.findall(r"%([^;]*)", embed.description)
             if any(terms):
-                embed.description = embed.description.replace(f"%{terms[0]}", "")
+                embed.description = embed.description.replace(
+                    f"%{terms[0]}", "")
                 for each in terms:
                     if each[0:7] == "%TOGGLE":
-                        params = each.replace('(', '').replace(')', '').split(', ')
+                        params = each.replace(
+                            '(', '').replace(')', '').split(', ')
                         models = Tortoise.describe_models()
                         for model in models:
                             name = model.__name__
@@ -98,7 +101,8 @@ class Configuration(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.slash_command(name='setup', description="Helps you set up Zoidberg to your needs. ")
+    @commands.slash_command(name='setup',
+                            description="Helps you set up Zoidberg to your needs. ")
     async def paginator(self, inter):
         # Creates the embeds as a list.
         embeds = [
@@ -124,9 +128,9 @@ Would you like to enable image filtering? We use state of the art AI models to d
 Commonly found NSFW images are stored in a database to reduce load.
 We do not store copies of images that are detected, only a hash that can't be turned back into an image.
 
-AI Filtering uses advanced AI to detect NSFW images. This includes images containing gore and may falsely 
-detect images of medical procedures. At the moment, this cannot be disabled. This feature will send a copy of 
-any new image, in enabled channels, to our image processing partners. 
+AI Filtering uses advanced AI to detect NSFW images. This includes images containing gore and may falsely
+detect images of medical procedures. At the moment, this cannot be disabled. This feature will send a copy of
+any new image, in enabled channels, to our image processing partners.
 
 Hash filtering uses our database to detect common images that may not be detected by AI.
 These images usually don't contain nudity, but are still extremely suggestive
@@ -148,7 +152,8 @@ I also can ignore certain roles.
             )
         ]
 
-        # Sends first embed with the buttons, it also passes the embeds list into the View class.
+        # Sends first embed with the buttons, it also passes the embeds list
+        # into the View class.
         await inter.send(embed=embeds, view=Menu(embeds))
 
 

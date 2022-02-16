@@ -27,7 +27,10 @@ class ImageFilteringModal(disnake.ui.Modal):
                 max_length=1024,
             ),
         ]
-        super().__init__(title="Create Tag", custom_id="create_tag", components=components)
+        super().__init__(
+            title="Create Tag",
+            custom_id="create_tag",
+            components=components)
 
     async def callback(self, inter: disnake.ModalInteraction) -> None:
         embed = disnake.Embed(title="Tag Creation")
@@ -37,4 +40,3 @@ class ImageFilteringModal(disnake.ui.Modal):
 
     async def on_error(self, error: Exception, inter: disnake.ModalInteraction) -> None:
         await inter.response.send_message("Oops, something went wrong. Please try again.", ephemeral=True)
-

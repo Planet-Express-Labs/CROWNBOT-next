@@ -1,7 +1,8 @@
 # Copyright 2021 Planet Express Labs
 # All rights reserved.
 # The only reason for taking full copyright is because of a few bad actors.
-# As long as you are using my code in good faith, we will probably not have an issue with it.
+# As long as you are using my code in good faith, we will probably not
+# have an issue with it.
 import disnake
 from disnake.ext import commands
 from disnake import Option, OptionType
@@ -11,13 +12,12 @@ class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.slash_command(
-        brief="Gets user info",
-        options=[
-            Option("user", "User to get info for.", OptionType.user, required=True)
-        ],
-        name="user-info"
-    )
+    @commands.slash_command(brief="Gets user info",
+                            options=[Option("user",
+                                            "User to get info for.",
+                                            OptionType.user,
+                                            required=True)],
+                            name="user-info")
     async def user_info(self, ctx, user=None):
         badges = {
             "staff": "<:staff:812692120049156127>",
@@ -27,10 +27,10 @@ class Moderation(commands.Cog):
             "hypesquad_bravery": "<:bravery:812692120015339541>",
             "hypesquad_brilliance": "<:brilliance:812692120326373426>",
             "hypesquad_balance": "<:balance:812692120270798878>",
-            "verified_bot_developer": "<:verified_bot_developer:812692120133042178>"
-        }
+            "verified_bot_developer": "<:verified_bot_developer:812692120133042178>"}
 
-        badge_string = ' '.join(badges[pf.name] for pf in user.public_flags.all() if pf.name in badges)
+        badge_string = ' '.join(
+            badges[pf.name] for pf in user.public_flags.all() if pf.name in badges)
         created_at = str(user.created_at)[:-7]
         reply = disnake.Embed(color=disnake.Color.blurple())
         reply.title = str(user)
@@ -95,10 +95,10 @@ class Moderation(commands.Cog):
         name="ban",
         description="Ban user",
         options=[
-                Option("user", "User to ban", OptionType.user, required=True),
-                Option("purge", "Number of days to purge messages. ", OptionType.string),
-                Option("reason", "Reason for the ban", OptionType.string)
-                ]
+            Option("user", "User to ban", OptionType.user, required=True),
+            Option("purge", "Number of days to purge messages. ", OptionType.string),
+            Option("reason", "Reason for the ban", OptionType.string)
+        ]
     )
     async def ban(self, ctx, user, reason=None, purge=0):
         try:
@@ -112,11 +112,19 @@ class Moderation(commands.Cog):
         name="purge",
         description="Deletes a lot of messages. How many messages? A lot!",
         options=[
-            Option("limit", "Number of messages to delete", OptionType.integer, required=True),
-            Option("user", "Who's messages to delete", OptionType.user),
-            Option("channel", "Channel from which to delete the messages.", OptionType.channel)
-        ]
-    )
+            Option(
+                "limit",
+                "Number of messages to delete",
+                OptionType.integer,
+                required=True),
+            Option(
+                "user",
+                "Who's messages to delete",
+                OptionType.user),
+            Option(
+                "channel",
+                "Channel from which to delete the messages.",
+                OptionType.channel)])
     async def purge(self, ctx, limit, user=None, channel=None):
         if channel is None:
             channel = ctx.channel
@@ -133,11 +141,12 @@ class Moderation(commands.Cog):
         await ctx.response.send_message(f"Deleted {limit} messages from {channel.mention}.", ephemeral=True)
 
     @commands.has_permissions(kick_members=True)
-    @commands.slash_command(
-        name="kick",
-        description="Kick user",
-        options=[Option("user", "User to kick", OptionType.user, required=True)]
-    )
+    @commands.slash_command(name="kick",
+                            description="Kick user",
+                            options=[Option("user",
+                                            "User to kick",
+                                            OptionType.user,
+                                            required=True)])
     async def kick(self, ctx, user):
         try:
             await user.kick()
