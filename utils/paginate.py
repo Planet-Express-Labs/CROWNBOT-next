@@ -41,7 +41,8 @@ class Menu(disnake.ui.View):
                         for model in models:
                             name = model.__name__
                             if name.lower == params[0]:
-                                self.model_components.append((params[3], model))
+                                self.model_components.append(
+                                    (params[3], model))
                                 break
                         self.additional_components.append(
                             disnake.ui.Button(
@@ -133,7 +134,8 @@ class ButtonMenu(Menu):
                         for model in models:
                             name = model.__name__
                             if name.lower == params[0]:
-                                self.model_components.append((params[3], model))
+                                self.model_components.append(
+                                    (params[3], model))
                                 break
                         self.additional_components.append(
                             disnake.ui.Button(
@@ -146,8 +148,6 @@ class ButtonMenu(Menu):
         for each in self.model_components:
             if each[0] == inter.component.custom_id:
                 break
-
-
 
 
 # class MenuEmbed(disnake.Embed):
@@ -177,8 +177,8 @@ async def progress_bar(iteration, total, prefix='', suffix='', decimals=1, lengt
         fill        - Optional  : bar fill character (Str)
         printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
     """
-    percent = ("{0:." + str(decimals) + "f}").format(100 * \
-               (iteration / float(total)))
+    percent = ("{0:." + str(decimals) + "f}").format(100 *
+                                                     (iteration / float(total)))
     filled_length = int(length * iteration // total)
     bar = fill * filled_length + '-' * (length - filled_length)
     return f'\r{prefix} |{bar}| {percent}% {suffix}'
