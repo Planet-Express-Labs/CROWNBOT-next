@@ -101,10 +101,51 @@ class Menu(disnake.ui.View):
         self.last_page.disabled = True
         await interaction.response.edit_message(embed=embed, view=self)
 
+
+class ButtonMenu(Menu):
+    def __init__(self, embeds: List[disnake.Embed]):
+        """
+        Discord embed based menu system.
+        :param embeds: A list of embeds to be displayed in the menu.
+        """
+        super().__init__(timeout=None)
+        self.embeds = embeds
+        self.embed_count = 0
+
+        self.first_page.disabled = True
+        self.prev_page.disabled = True
+        self.additional_components = []
+        self.model_components = []
+
+        # Sets the footer of the embeds with their respective page numbers.
+        for i, embed in enumerate(self.embeds):
+            embed.set_footer(text=f"Page {i + 1} of {len(self.embeds)}")
+            terms = re.findall(r"%([^;]*)", embed.description)
+            # grab the button declarations
+            if any(terms):
+                embed.description = embed.description.replace(
+                    f"%{terms[0]}", "")
+                for each in terms:
+                    if each[0:7] == "%TOGGLE":
+                        params = each.replace(
+                            '(', '').replace(')', '').split(', ')
+                        models = Tortoise.describe_models()
+                        for model in models:
+                            name = model.__name__
+                            if name.lower == params[0]:
+                                self.model_components.append((params[3], model))
+                                break
+                        self.additional_components.append(
+                            disnake.ui.Button(
+                                label=params[2],
+                                custom_id=params[3]
+                            )
+                        )
+
     async def interaction_check(self, inter: disnake.MessageInteraction):
         for each in self.model_components:
             if each[0] == inter.component.custom_id:
-
+                break
 
 
 
