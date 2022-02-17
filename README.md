@@ -26,10 +26,10 @@ Natural AI image generation and inpainting can be used to rework existing images
 
 ### Coming soon
 
-- Use our cropping AI to automatically generate stabalized fancams for your favorite idols at the press of a button
-- Quick and effective video stabilization
-- Advanced action scheduling system
-- Adanced moderation action system
-- Automatic idol identification (Will only support very popular idols at the start)
-- Integration with IreneBot's extensive kpop DB
-- And much more.
+  - Use our cropping AI to automatically generate stabalized fancams for your favorite idols at the press of a button
+  - Quick and effective video stabilization
+  - Advanced action scheduling system
+  - Adanced moderation action system
+  - Automatic idol identification (Will only support very popular idols at the start)
+  - Integration with IreneBot's extensive kpop DB
+  - And much more.
