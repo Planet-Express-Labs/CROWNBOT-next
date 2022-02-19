@@ -1,5 +1,6 @@
 import inspect
-import random
+import secrets
+import logging
 from asyncio import TimeoutError
 from math import floor
 from zoidberg.config import *
@@ -18,7 +19,7 @@ def admin_command(func):
         else:
             ctx = args[0]
         bot = ctx.bot
-        print(
+        logging.info(
             ctx.message.author.name,
             "is trying to use an admin command. ",
             func.__name__)
@@ -33,7 +34,7 @@ Administrator. It usually boils down to these three things:
 
 root's one time password (sent in the console):
             ```""")
-            otp = floor(random.random() * 1000000)
+            otp = secrets.token_urlsafe(6)
             print(ctx.message.author.name + "'s otp code", otp)
 
             def wait(m):
@@ -42,7 +43,8 @@ root's one time password (sent in the console):
             try:
                 resp = await bot.wait_for('message', check=wait)
             except TimeoutError:
-                return await bot.response.send_message("The verification has timed out. Please try again.")
+                return await bot.response.send_message("The verification has timed out. Please try again.",
+                                                       delete_after=5)
             await message.delete()
             if int(resp.content) == otp:
                 await ctx.send("You have been verified.", delete_after=5)
@@ -52,5 +54,6 @@ root's one time password (sent in the console):
                 return await ctx.send("The verification code you entered was incorrect. Please try again.",
                                       delete_after=5)
         else:
-            return await ctx.send("You do not have permission to use this command.")
+            return await ctx.send("You do not have permission to use this command.",
+                                  delete_after=5)
     return wrapper
