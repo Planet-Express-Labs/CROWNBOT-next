@@ -87,35 +87,39 @@ async def handler() -> None:
     sys.exit(1)
 
 
-@bot.event
-async def on_ready():
-    # Initialize our databases
-    await init()
-    await bot.wait_until_ready()
-    print(f"Bot is ready, logged in as {bot.user.name} ({bot.user.id}).")
+class MainBot(commands.Bot):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.persistent_view = None
 
-@bot.slash_command(name='foo', description='Tests if the bot is dead or not')
-async def cmd_foo(ctx):
-    """
-    Simple test command
-    """
-    await ctx.response.send_message(f"Bar!\nLatency: {bot.latency} ms")
+    @bot.event
+    async def on_ready(self):
+        # Initialize our databases
+        await init()
+        await bot.wait_until_ready()
+        print(f"Bot is ready, logged in as {bot.user.name} ({bot.user.id}).")
 
+    @bot.slash_command(name='foo', description='Tests if the bot is dead or not')
+    async def cmd_foo(ctx):
+        """
+        Simple test command
+        """
+        await ctx.response.send_message(f"Bar!\nLatency: {bot.latency} ms")
 
-@bot.command(name="resetcogs", brief="reloads all the cogs")
-@admin_command
-async def cmdadmin_resetcogs(ctx):
-    """
-    Reset all cogs.
-    """
-    for cog in os.listdir(Path('cogs/')):
-        if filename.endswith(".py") and cog not in DISABLED_COGS:
-            bot.unload_extension(cog)
-            bot.load_extension(cog)
-    await ctx.message.delete()
-    return await ctx.reply("Cogs reset.", delete_after=5)
+    @bot.command(name="resetcogs", brief="reloads all the cogs")
+    @admin_command
+    async def cmdadmin_resetcogs(ctx):
+        """
+        Reset all cogs.
+        """
+        for cog in os.listdir(Path('cogs/')):
+            if filename.endswith(".py") and cog not in DISABLED_COGS:
+                bot.unload_extension(cog)
+                bot.load_extension(cog)
+        await ctx.message.delete()
+        return await ctx.reply("Cogs reset.", delete_after=5)
 
-# Gracefully handle Heroku's SIGTERM signal to prevent DB data loss.
-signal.signal(signal.SIGTERM, handler)
+    # Gracefully handle Heroku's SIGTERM signal to prevent DB data loss.
+    signal.signal(signal.SIGTERM, handler)
 bot.run(BOT_TOKEN)

@@ -94,6 +94,7 @@ class User(Model):
     gender = fields.TextField(null=True)
     birthday = fields.DatetimeField(null=True)
     private = fields.BooleanField(default=False)
+    saved_terms = fields.JSONField(null=True)
 
     def __str__(self):
         return self.preferred_name
@@ -104,7 +105,7 @@ class User(Model):
 
 class ConfessChannel(Model):
     # Stores information specific to confess channels
-    intenral_id = fields.IntField(pk=True)
+    internal_id = fields.IntField(pk=True)
     confess_id = fields.BigIntField()
     enable = fields.BooleanField(default=False, null=True)
     guild = fields.BigIntField(default=0, null=True)
@@ -120,3 +121,17 @@ class ConfessChannel(Model):
 
     class Meta:
         table = "confess_channels"
+
+
+class PersistentView(Model):
+    internal_id = fields.IntField(pk=True)
+    message_id = fields.BigIntField()
+    guild_id = fields.BigIntField()
+    channel_id = fields.BigIntField()
+    user_id = fields.BigIntField()
+    timestamp = fields.DatetimeField(auto_now_add=True)
+    type = fields.TextField()
+    data = fields.JSONField()
+
+    class Meta:
+        table = "persistent_views"
