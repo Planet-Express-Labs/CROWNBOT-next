@@ -7,10 +7,9 @@
 import art
 import disnake
 from disnake.ext import commands
-import PIL
+from PIL import Image
 from utils import images
-import requests_async as requests
-
+import io
 
 class Toys(commands.Cog):
     def __init__(self, bot):
@@ -33,7 +32,8 @@ class Toys(commands.Cog):
     @commands.slash_command(name="ascii-art",
                             description="Converts content to ASCII art.")
     async def cmd_text_to_art(self, inter,
-                              image: disnake.Attachment = commands.Param()) -> None:
+                              image: disnake.Attachment = commands.Param(),
+                              columns: int = commands.Param(default=80)) -> None:
         """
         Converts text to ASCII art.
         :param image: image to convert to ASCII art
@@ -41,13 +41,14 @@ class Toys(commands.Cog):
         :param inter:
         :return:
         """
-        imagebytes = await requests.get(image.url)
-        ascii = images.image_to_ascii(imagebytes)
-        if ascii.length > 4000:
+        byte = await image.read()
+        img = Image.open(io.BytesIO(byte))
+        ascii = images.image_to_ascii(img, columns=columns)
+        if len(ascii) > 4000:
             return await inter.response.send_message(f"```{ascii}```")
         else:
             return await inter.response.send_message("The size of the image is too large for me to send as a "
-                                                     "message!", file=disnake.File(ascii, "result.txt"))
+                                                     "message!", file=disnake.File(bytes(ascii), "result.txt"))
 
 
 def setup(bot):

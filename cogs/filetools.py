@@ -1,6 +1,5 @@
 import pypdftk
 from disnake.ext import commands
-from main import bot
 
 
 def flatten_pdf(attachment):

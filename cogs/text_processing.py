@@ -7,7 +7,7 @@ import disnake
 from disnake.ext import commands
 from disnake import Option, OptionType
 from utils.languagetool_utils import get_matches, correct
-import requests
+import httpx
 from async_google_trans_new import AsyncTranslator
 from async_google_trans_new.constant import LANGUAGES
 import pycountry
@@ -41,7 +41,7 @@ class Text_Processor(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ltool_codes = ['auto'] + [lang['longCode'].lower() for lang in
-                                       requests.get("https://api.languagetoolplus.com/v2/languages").json()]
+                                       httpx.get("https://api.languagetoolplus.com/v2/languages").json()]
         self.translate_langs = LANGUAGES
         self.translator = AsyncTranslator()
 

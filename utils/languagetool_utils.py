@@ -3,7 +3,7 @@
 # The only reason for taking full copyright is because of a few bad actors.
 # As long as you are using my code in good faith, we will probably not
 # have an issue with it.
-import requests_async
+import httpx
 
 
 class Match:
@@ -12,10 +12,10 @@ class Match:
         self.offset = match_dict.get('offset')
         self.errorLength = match_dict.get('length')
 
-
 async def get_matches(text, lang="en-US"):
-    response = await requests_async.get("https://api.languagetoolplus.com/v2/check",
-                                        params={"text": text, "language": lang}, verify=False)
+    async with httpx.AsyncClient() as client:
+        response = await client.get("https://api.languagetoolplus.com/v2/check",
+                                    params={"text": text, "language": lang}, verify=False)
     query_dict = response.json()
     return [Match(match) for match in query_dict['matches']
             if match.get('replacements')]

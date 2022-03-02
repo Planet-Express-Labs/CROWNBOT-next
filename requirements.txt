@@ -1,4 +1,4 @@
-requests~=2.27.1
+httpx
 openai~=0.14.0
 pypdftk~=0.5
 ffmpeg~=1.4
@@ -11,3 +11,4 @@ tortoise~=0.1.1
 async_google_trans_new
 pycountry
 pillow
+wikipedia-api
