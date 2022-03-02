@@ -46,7 +46,7 @@ root's one time password (sent in the console):
                 return await bot.response.send_message("The verification has timed out. Please try again.",
                                                        delete_after=5)
             await message.delete()
-            if int(resp.content) == otp:
+            if resp.content == otp:
                 await ctx.send("You have been verified.", delete_after=5)
                 await resp.delete()
                 return await func(*args, **kwargs)
