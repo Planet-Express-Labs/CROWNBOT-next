@@ -48,8 +48,7 @@ def find_confusing(text: str) -> str:
         top_p=1.0,
         frequency_penalty=2,
         presence_penalty=0.0,
-        stop=["\n"]
-    )
+        stop=["\n"])
     return response.choices[0].text.split(", ")
 
 
@@ -126,15 +125,20 @@ class OpenAI(commands.Cog):
             return await ctx.edit_original_message(content="No results found.", embed=None, components=None)
 
         # Create an embed using content from DDG API
-        embed = disnake.Embed(title=response['Heading'], description=response['AbstractText'], color=0x80bee6)
+        embed = disnake.Embed(
+            title=response['Heading'],
+            description=response['AbstractText'],
+            color=0x80bee6)
         if response["Image"] != "":
             embed.set_image(url="https://duckduckgo.com" + response["Image"])
         if response['Definition'] != "" and response["Abstract"] != response["Definition"]:
-            embed.add_field(name="definition",
-                            value=f"{response['Definition']}\n\n{response['DefinitionSource']}\n"
-                                  f"{response['DefinitionURL']}")
-        embed.set_footer(text=f"CROWNBOT | Powered by DuckDuckGo",
-                         icon_url="https://duckduckgo.com/assets/common/dax-logo.svg")
+            embed.add_field(
+                name="definition",
+                value=f"{response['Definition']}\n\n{response['DefinitionSource']}\n"
+                f"{response['DefinitionURL']}")
+        embed.set_footer(
+            text=f"CROWNBOT | Powered by DuckDuckGo",
+            icon_url="https://duckduckgo.com/assets/common/dax-logo.svg")
         embed.set_author(name=response['AbstractSource'])
 
         await ctx.edit_original_message(embed=embed, components=None)

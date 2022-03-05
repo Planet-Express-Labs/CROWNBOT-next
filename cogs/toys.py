@@ -11,6 +11,7 @@ from PIL import Image
 from utils import images
 import io
 
+
 class Toys(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

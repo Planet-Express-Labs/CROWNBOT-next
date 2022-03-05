@@ -12,12 +12,12 @@ from tortoise.models import Model
 
 
 def to_style(convert) -> disnake.ButtonStyle:
-    if type(convert) is bool:
+    if isinstance(convert, bool):
         if convert:
             return disnake.ButtonStyle.green
         else:
             return disnake.ButtonStyle.red
-    elif type(convert) is str:
+    elif isinstance(convert, str):
         if len(convert) == 0:
             return disnake.ButtonStyle.red
         else:
@@ -52,7 +52,8 @@ class ImageFilteringView(disnake.ui.View):
         await interaction.response.edit_message("Settings saved!", delete_after=5, ephemeral=True)
         self.stop()
 
-    # This one is similar to the confirmation button except sets the inner value to `False`
+    # This one is similar to the confirmation button except sets the inner
+    # value to `False`
     @disnake.ui.button(label="Cancel", style=disnake.ButtonStyle.grey)
     async def cancel(self, button: disnake.ui.Button, interaction: disnake.MessageInteraction):
         await interaction.response.send_message("Cancelled.", delete_after=5, ephemeral=True)
