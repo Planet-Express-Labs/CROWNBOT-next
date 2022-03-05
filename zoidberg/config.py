@@ -8,7 +8,6 @@ import codecs
 import configparser
 import logging
 import os
-import ast
 from pathlib import Path
 import openai
 
@@ -26,6 +25,7 @@ if not os.path.exists(config_path):
     HASTE_URL = os.getenv("PEXL_HASTE_URL")
     ADMIN_ID = os.getenv("PEXL_ADMIN_ID")
     openai.api_key = os.getenv("PEXL_OPENAI_KEY")
+    error_channel = int(os.getenv("PEXL_ERROR_CHANNEL"))
 
 else:
     config_file = config_path
@@ -48,3 +48,4 @@ else:
     ADMIN_ID = config.get("Bot", "admin_ids").split(", ")
 
     openai.api_key = config.get("AI", "openai_api_key")
+    error_channel = int(config.get("Bot", "error_channel"))
