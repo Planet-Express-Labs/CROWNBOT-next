@@ -11,6 +11,7 @@ from PIL import Image
 from utils import images
 import io
 
+
 class Toys(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -27,15 +28,17 @@ class Toys(commands.Cog):
         try:
             await inter.response.send_message(f"```{art.text2art(text, font=font)}```")
         except art.artError:
-            await inter.response.send_message(f":exclamation: Something went wrong! Are you sure {font} exists within text2art?")
+            await inter.response.send_message(f":exclamation: Something went wrong! Are you sure {font} exists within "
+                                              f"text2art?")
 
-    @commands.slash_command(name="ascii-art",
+    @commands.slash_command(name="img_ascii-art",
                             description="Converts content to ASCII art.")
     async def cmd_text_to_art(self, inter,
                               image: disnake.Attachment = commands.Param(),
                               columns: int = commands.Param(default=80)) -> None:
         """
         Converts text to ASCII art.
+        :param columns:
         :param image: image to convert to ASCII art
         :param text: text to convert to ASCII art
         :param inter:
@@ -43,12 +46,12 @@ class Toys(commands.Cog):
         """
         byte = await image.read()
         img = Image.open(io.BytesIO(byte))
-        ascii = images.image_to_ascii(img, columns=columns)
-        if len(ascii) > 4000:
-            return await inter.response.send_message(f"```{ascii}```")
+        img_ascii = images.image_to_ascii(img, columns=columns)
+        if len(img_ascii) > 4000:
+            return await inter.response.send_message(f"```{img_ascii}```")
         else:
             return await inter.response.send_message("The size of the image is too large for me to send as a "
-                                                     "message!", file=disnake.File(bytes(ascii), "result.txt"))
+                                                     "message!", file=disnake.File(bytes(img_ascii), "result.txt"))
 
 
 def setup(bot):
