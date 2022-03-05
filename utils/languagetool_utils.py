@@ -12,6 +12,7 @@ class Match:
         self.offset = match_dict.get('offset')
         self.errorLength = match_dict.get('length')
 
+
 async def get_matches(text, lang="en-US"):
     async with httpx.AsyncClient() as client:
         response = await client.get("https://api.languagetoolplus.com/v2/check",
